@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.taikang.log.feign.RemoteLogServiceFallbackImpl,\
+  com.taikang.log.feign.RemoteLogServiceFallbackFactory

@@ -1,0 +1,61 @@
+server:
+  port: 10010
+
+spring:
+  application:
+    name: pos-api-gateway
+  cloud:
+    nacos:
+      discovery:
+        register-enabled: false
+        server-addr: 127.0.0.1:8848
+        namespace: a786f4d0-3332-452b-95bf-fea6addb093c
+        cluster-name: DEFAULT
+        group: POS_GROUP
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:8080
+        port: 8719
+      scg:
+        order: -2147483648
+        fallback:
+          mode: response
+          response-status: 429
+          response-body: 系统繁忙，请稍后再试
+          content-type: application/json
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: pos-client-web
+        #uri: http://localhost:56020
+        uri: lb://pos-client-web
+        predicates:
+          - Path=/pos-client-web/**
+        filters:
+          - StripPrefix=1
+          #- name: RequestRateLimiter  #redis限流
+            #args:
+              #key-resolver: '#{@hostAddrKeyResolver}'
+              #redis-rate-limiter.replenishRate: 1
+              #redis-rate-limiter.burstCapacity: 3
+              
+redis:
+  host: 127.0.0.1
+  port: 6379
+  database: 0
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: '*'
+    
+test:
+  name: postool-gateway-2020-05-09

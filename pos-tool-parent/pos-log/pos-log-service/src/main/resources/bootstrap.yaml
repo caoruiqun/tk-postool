@@ -1,0 +1,6 @@
+server:
+  port: 56090
+
+spring:
+  application:
+    name: pos-log
